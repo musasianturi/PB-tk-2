@@ -1,4 +1,4 @@
-# Diagram UML — TravelKu
+# Diagram UML - TravelKu
 
 Diagram UML untuk aplikasi TravelKu Tiap file `.puml` sudah punya pasangan hasil render `.png` dengan **nama file (basename) yang identik** 
 
@@ -16,10 +16,10 @@ Alur proses langkah-demi-langkah per use case, termasuk titik keputusan dan akti
 
 | File | Isi |
 |---|---|
-| `activity-search-book-flight.puml` / `.png` | Alur cari & pesan penerbangan — decision validasi input/hasil kosong/pilihan, fork/join saat konfirmasi booking |
-| `activity-search-book-hotel.puml` / `.png` | Alur cari & pesan hotel — struktur sama seperti penerbangan |
-| `activity-cancel-reservation.puml` / `.png` | Alur pembatalan reservasi — decision tipe reservasi (flight/hotel) |
-| `activity-view-reservations.puml` / `.png` | Alur lihat semua pemesanan — decision daftar kosong + loop tampilkan reservasi |
+| `activity-search-book-flight.puml` / `.png` | Alur cari & pesan penerbangan;decision validasi input/hasil kosong/pilihan, fork/join saat konfirmasi booking |
+| `activity-search-book-hotel.puml` / `.png` | Alur cari & pesan hotel;struktur sama seperti penerbangan |
+| `activity-cancel-reservation.puml` / `.png` | Alur pembatalan reservasi;decision tipe reservasi (flight/hotel) |
+| `activity-view-reservations.puml` / `.png` | Alur lihat semua pemesanan;decision daftar kosong + loop tampilkan reservasi |
 
 ### `ClassDiagram/`
 Struktur statis sistem: class, atribut/metode, dan relasi (asosiasi, multiplisitas, generalisasi/pewarisan, realization, composition, dependency).
@@ -33,9 +33,9 @@ Interaksi antar objek (lifeline + pesan + activation bar) untuk skenario transak
 
 | File | Isi |
 |---|---|
-| `sequence-book-flight.puml` / `.png` | Skenario pelanggan memesan penerbangan — dari input kriteria sampai kotak konfirmasi |
-| `sequence-book-hotel.puml` / `.png` | Skenario pelanggan memesan hotel — struktur sama seperti penerbangan |
-| `sequence-cancel-reservation.puml` / `.png` | Skenario pembatalan reservasi — `alt` sukses vs `ReservationNotFoundException` |
+| `sequence-book-flight.puml` / `.png` | Skenario pelanggan memesan penerbangan;dari input kriteria sampai kotak konfirmasi |
+| `sequence-book-hotel.puml` / `.png` | Skenario pelanggan memesan hotel;struktur sama seperti penerbangan |
+| `sequence-cancel-reservation.puml` / `.png` | Skenario pembatalan reservasi;`alt` sukses vs `ReservationNotFoundException` |
 
 
 
