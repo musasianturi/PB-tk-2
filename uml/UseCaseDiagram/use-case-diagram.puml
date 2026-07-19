@@ -1,0 +1,34 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+title Use Case Diagram - TravelKu (Sistem Pemesanan Perjalanan)
+
+actor "Customer" as Customer
+
+rectangle "TravelKu - Sistem Pemesanan Perjalanan" {
+  usecase "Cari & Pesan Penerbangan\n(Search & Book Flight)" as UC1
+  usecase "Cari Penerbangan\n(Search Flights)" as UC1a
+  usecase "Pesan Penerbangan\n(Book Flight)" as UC1b
+
+  usecase "Cari & Pesan Hotel\n(Search & Book Hotel)" as UC2
+  usecase "Cari Hotel\n(Search Hotels)" as UC2a
+  usecase "Pesan Hotel\n(Book Hotel)" as UC2b
+
+  usecase "Lihat Semua Pemesanan\n(View All Reservations)" as UC3
+
+  usecase "Batalkan Reservasi\n(Cancel Reservation)" as UC4
+  usecase "Nomor Konfirmasi Tidak Ditemukan\n(Reservation Not Found)" as UC4a
+}
+
+Customer -- UC1
+Customer -- UC2
+Customer -- UC3
+Customer -- UC4
+
+UC1 ..> UC1a : <<include>>
+UC1 ..> UC1b : <<include>>
+UC2 ..> UC2a : <<include>>
+UC2 ..> UC2b : <<include>>
+UC4a ..> UC4 : <<extend>>
+
+@enduml

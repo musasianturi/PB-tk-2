@@ -1,0 +1,101 @@
+@startuml
+title Class Diagram - TravelKu (Sistem Pemesanan Perjalanan)
+skinparam classAttributeIconSize 0
+
+class TravelApp {
+  -flights: List<Flight>
+  -hotels: List<Hotel>
+  -reservations: List<Reservation>
+  +searchFlights(origin, destination, date, passengerCount): List<Flight>
+  +bookFlight(flight, passengerCount, customerName, customerContact): void
+  +searchHotels(location, checkIn, checkOut, guestCount): List<Hotel>
+  +bookHotel(hotel, guestCount, customerName, customerContact): void
+  +cancelReservation(confirmationNumber): void
+  +viewAllReservations(): void
+}
+
+class Flight {
+  -flightNumber: String
+  -origin: String
+  -destination: String
+  -date: String
+  -availableSeats: int
+  -pricePerSeat: double
+  +getAvailableSeats(): int
+  +setAvailableSeats(seats: int): void
+  +getPricePerSeat(): double
+}
+
+class Hotel {
+  -hotelId: String
+  -name: String
+  -location: String
+  -checkInDate: String
+  -checkOutDate: String
+  -availableRooms: int
+  -pricePerNight: double
+  +getAvailableRooms(): int
+  +setAvailableRooms(rooms: int): void
+  +getPricePerNight(): double
+}
+
+interface Bookable {
+  +book(): void
+  +cancel(): void
+  +getConfirmationNumber(): int
+}
+
+abstract class Reservation {
+  #confirmationNumber: int
+  #customerName: String
+  #customerContact: String
+  +{abstract} display(): void
+  +getConfirmationNumber(): int
+  +getCustomerName(): String
+  +getCustomerContact(): String
+}
+
+class FlightReservation {
+  -flight: Flight
+  -passengerCount: int
+  +book(): void
+  +cancel(): void
+  +display(): void
+}
+
+class HotelReservation {
+  -hotel: Hotel
+  -guestCount: int
+  +book(): void
+  +cancel(): void
+  +display(): void
+}
+
+class ReservationNotFoundException {
+  -confirmationNumber: int
+  +getConfirmationNumber(): int
+}
+note right of ReservationNotFoundException
+  extends java.lang.Exception
+end note
+
+class ConfirmationNumberGenerator {
+  +{static} generate(): int
+}
+
+Reservation ..|> Bookable
+Reservation <|-- FlightReservation
+Reservation <|-- HotelReservation
+
+TravelApp "1" *-- "0..*" Flight
+TravelApp "1" *-- "0..*" Hotel
+TravelApp "1" *-- "0..*" Reservation
+
+FlightReservation "0..*" --> "1" Flight
+HotelReservation "0..*" --> "1" Hotel
+
+TravelApp ..> ReservationNotFoundException : <<throws>>
+FlightReservation ..> ConfirmationNumberGenerator : <<uses>>
+HotelReservation ..> ConfirmationNumberGenerator : <<uses>>
+
+@enduml

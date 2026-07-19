@@ -1,0 +1,64 @@
+@startuml
+title Sequence Diagram - Pelanggan Membatalkan Reservasi (Cancel Reservation)
+
+actor Customer
+participant "Main" as Main
+participant "app: TravelApp" as App
+participant "reservation: Reservation\n(FlightReservation /\nHotelReservation)" as Res
+participant "flight: Flight /\nhotel: Hotel" as Inv
+participant "exception:\nReservationNotFoundException" as Ex
+
+Customer -> Main : pilih menu "4. Batalkan Reservasi"
+activate Main
+
+Main -> App : promptCancelReservation(scanner)
+activate App
+
+App -> Customer : minta input nomor konfirmasi
+Customer -> App : input confirmationNumber
+
+App -> App : cancelReservation(confirmationNumber)
+activate App
+App -> App : cari reservasi di daftar reservasi aktif
+
+alt reservasi ditemukan
+  alt tipe == FlightReservation
+    App -> Res : cancel()
+    activate Res
+    Res -> Inv : setAvailableSeats(availableSeats + passengerCount)
+    activate Inv
+    Inv --> Res : void
+    deactivate Inv
+    Res --> App : return
+    deactivate Res
+  else tipe == HotelReservation
+    App -> Res : cancel()
+    activate Res
+    Res -> Inv : setAvailableRooms(availableRooms + 1)
+    activate Inv
+    Inv --> Res : void
+    deactivate Inv
+    Res --> App : return
+    deactivate Res
+  end
+
+  App -> App : reservations.remove(reservation)
+  App --> App : return
+  deactivate App
+  App --> Customer : "Reservasi berhasil dibatalkan"
+
+else reservasi tidak ditemukan
+  App -> Ex : create ReservationNotFoundException(confirmationNumber)
+  activate Ex
+  Ex --> App : throw
+  deactivate Ex
+  App --> App : return (exception)
+  deactivate App
+  App --> Customer : tampilkan pesan error\n(exception.getMessage())
+end
+
+App --> Main : return
+deactivate App
+deactivate Main
+
+@enduml

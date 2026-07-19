@@ -1,0 +1,21 @@
+@startuml
+title Activity Diagram - Lihat Semua Pemesanan (View All Reservations)
+
+start
+
+if (Daftar reservasi kosong?) then (ya)
+  :Tampilkan "Belum ada reservasi";
+  stop
+else (tidak)
+endif
+
+:Tampilkan header "DAFTAR PEMESANAN ANDA";
+
+repeat
+  :Ambil reservasi berikutnya;
+  :Tampilkan detail reservasi\n(display() polymorphic - kotak flight atau hotel);
+repeat while (Masih ada reservasi berikutnya?) is (ya)
+->tidak;
+
+stop
+@enduml

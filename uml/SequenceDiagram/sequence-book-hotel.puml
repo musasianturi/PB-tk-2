@@ -1,0 +1,72 @@
+@startuml
+title Sequence Diagram - Pelanggan Memesan Hotel (Book Hotel)
+
+actor Customer
+participant "Main" as Main
+participant "app: TravelApp" as App
+participant "hotel: Hotel" as Hotel
+participant "reservation:\nHotelReservation" as Reservation
+participant "ConfirmationNumberGenerator" as Gen
+
+Customer -> Main : pilih menu "2. Cari & Pesan Hotel"
+activate Main
+
+Main -> App : searchAndBookHotel(scanner)
+activate App
+
+App -> Customer : minta input kriteria\n(kota, check-in, check-out, jumlah tamu)
+Customer -> App : input location, checkIn, checkOut, guestCount
+
+App -> App : searchHotels(location, checkIn, checkOut, guestCount)
+activate App
+App --> App : return List<Hotel> results
+deactivate App
+
+alt hasil pencarian kosong
+  App --> Customer : "Tidak ada hotel tersedia"
+else hasil pencarian ada
+  App -> Customer : tampilkan daftar hotel bernomor
+  Customer -> App : pilih nomor hotel
+
+  alt pilihan == 0 atau di luar rentang
+    App --> Customer : batal / "Pilihan tidak valid"
+  else pilihan valid
+    Customer -> App : input nama & kontak tamu
+
+    App -> Reservation : create HotelReservation(hotel,\nguestCount, customerName, customerContact)
+    activate Reservation
+
+    App -> Reservation : book()
+    activate Reservation
+
+    Reservation -> Gen : generate()
+    activate Gen
+    Gen --> Reservation : confirmationNumber
+    deactivate Gen
+
+    Reservation -> Hotel : setAvailableRooms(availableRooms - 1)
+    activate Hotel
+    Hotel --> Reservation : void
+    deactivate Hotel
+
+    Reservation --> App : return
+    deactivate Reservation
+
+    App -> App : reservations.add(reservation)
+
+    App -> Reservation : display()
+    activate Reservation
+    Reservation -> Hotel : getName(), getLocation(),\ngetCheckInDate(), getCheckOutDate(), getPricePerNight()
+    activate Hotel
+    Hotel --> Reservation : detail hotel
+    deactivate Hotel
+    Reservation --> Customer : tampilkan kotak konfirmasi\n(hotel, check-in/out, jumlah tamu, total harga)
+    deactivate Reservation
+  end
+end
+
+App --> Main : return
+deactivate App
+deactivate Main
+
+@enduml

@@ -1,0 +1,54 @@
+@startuml
+title Activity Diagram - Cari & Pesan Hotel (Search & Book Hotel)
+
+start
+:Input kota, tanggal check-in, tanggal check-out, jumlah tamu;
+
+if (Jumlah tamu valid angka?) then (tidak)
+  :Tampilkan "Input tidak valid";
+  stop
+else (ya)
+endif
+
+:searchHotels() - cari hotel\nberdasarkan lokasi, tanggal, kamar tersedia (>0);
+
+if (Hasil pencarian kosong?) then (ya)
+  :Tampilkan "Tidak ada hotel tersedia";
+  stop
+else (tidak)
+endif
+
+:Tampilkan daftar hotel bernomor;
+:Input pilihan nomor hotel;
+
+if (Input valid angka?) then (tidak)
+  :Tampilkan "Input tidak valid";
+  stop
+else (ya)
+endif
+
+if (Pilihan == 0?) then (ya)
+  :Batal (kembali ke menu utama);
+  stop
+else (tidak)
+endif
+
+if (Pilihan dalam rentang hasil?) then (tidak)
+  :Tampilkan "Pilihan tidak valid";
+  stop
+else (ya)
+endif
+
+:Input nama & kontak tamu;
+
+fork
+  :Generate nomor konfirmasi\n(ConfirmationNumberGenerator);
+fork again
+  :Kurangi availableRooms sebesar 1\n(selalu 1 kamar per reservasi);
+end fork
+
+:Simpan HotelReservation ke daftar reservasi aktif;
+:Tampilkan kotak konfirmasi pemesanan\n(hotel, check-in/out, jumlah tamu, total harga);
+
+stop
+@enduml

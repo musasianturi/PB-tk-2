@@ -1,0 +1,72 @@
+@startuml
+title Sequence Diagram - Pelanggan Memesan Penerbangan (Book Flight)
+
+actor Customer
+participant "Main" as Main
+participant "app: TravelApp" as App
+participant "flight: Flight" as Flight
+participant "reservation:\nFlightReservation" as Reservation
+participant "ConfirmationNumberGenerator" as Gen
+
+Customer -> Main : pilih menu "1. Cari & Pesan Penerbangan"
+activate Main
+
+Main -> App : searchAndBookFlight(scanner)
+activate App
+
+App -> Customer : minta input kriteria\n(kota asal, tujuan, tanggal, jumlah penumpang)
+Customer -> App : input origin, destination, date, passengerCount
+
+App -> App : searchFlights(origin, destination, date, passengerCount)
+activate App
+App --> App : return List<Flight> results
+deactivate App
+
+alt hasil pencarian kosong
+  App --> Customer : "Tidak ada penerbangan tersedia"
+else hasil pencarian ada
+  App -> Customer : tampilkan daftar penerbangan bernomor
+  Customer -> App : pilih nomor penerbangan
+
+  alt pilihan == 0 atau di luar rentang
+    App --> Customer : batal / "Pilihan tidak valid"
+  else pilihan valid
+    Customer -> App : input nama & kontak penumpang
+
+    App -> Reservation : create FlightReservation(flight,\npassengerCount, customerName, customerContact)
+    activate Reservation
+
+    App -> Reservation : book()
+    activate Reservation
+
+    Reservation -> Gen : generate()
+    activate Gen
+    Gen --> Reservation : confirmationNumber
+    deactivate Gen
+
+    Reservation -> Flight : setAvailableSeats(availableSeats - passengerCount)
+    activate Flight
+    Flight --> Reservation : void
+    deactivate Flight
+
+    Reservation --> App : return
+    deactivate Reservation
+
+    App -> App : reservations.add(reservation)
+
+    App -> Reservation : display()
+    activate Reservation
+    Reservation -> Flight : getOrigin(), getDestination(), getDate(), getPricePerSeat()
+    activate Flight
+    Flight --> Reservation : detail penerbangan
+    deactivate Flight
+    Reservation --> Customer : tampilkan kotak konfirmasi\n(rute, tanggal, jumlah tiket, total harga)
+    deactivate Reservation
+  end
+end
+
+App --> Main : return
+deactivate App
+deactivate Main
+
+@enduml

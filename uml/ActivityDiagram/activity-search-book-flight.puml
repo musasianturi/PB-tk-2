@@ -1,0 +1,54 @@
+@startuml
+title Activity Diagram - Cari & Pesan Penerbangan (Search & Book Flight)
+
+start
+:Input kota asal, kota tujuan, tanggal, jumlah penumpang;
+
+if (Jumlah penumpang valid angka?) then (tidak)
+  :Tampilkan "Input tidak valid";
+  stop
+else (ya)
+endif
+
+:searchFlights() - cari penerbangan\nberdasarkan asal, tujuan, tanggal, kursi cukup;
+
+if (Hasil pencarian kosong?) then (ya)
+  :Tampilkan "Tidak ada penerbangan tersedia";
+  stop
+else (tidak)
+endif
+
+:Tampilkan daftar penerbangan bernomor;
+:Input pilihan nomor penerbangan;
+
+if (Input valid angka?) then (tidak)
+  :Tampilkan "Input tidak valid";
+  stop
+else (ya)
+endif
+
+if (Pilihan == 0?) then (ya)
+  :Batal (kembali ke menu utama);
+  stop
+else (tidak)
+endif
+
+if (Pilihan dalam rentang hasil?) then (tidak)
+  :Tampilkan "Pilihan tidak valid";
+  stop
+else (ya)
+endif
+
+:Input nama & kontak penumpang;
+
+fork
+  :Generate nomor konfirmasi\n(ConfirmationNumberGenerator);
+fork again
+  :Kurangi availableSeats\nsesuai jumlah penumpang;
+end fork
+
+:Simpan FlightReservation ke daftar reservasi aktif;
+:Tampilkan kotak konfirmasi pemesanan\n(rute, tanggal, jumlah tiket, total harga);
+
+stop
+@enduml

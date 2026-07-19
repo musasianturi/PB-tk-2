@@ -1,0 +1,32 @@
+@startuml
+title Activity Diagram - Batalkan Reservasi (Cancel Reservation)
+
+start
+:Input nomor konfirmasi;
+
+if (Input valid angka?) then (tidak)
+  :Tampilkan "Nomor konfirmasi harus berupa angka";
+  stop
+else (ya)
+endif
+
+:Cari reservasi dengan nomor konfirmasi tsb\ndi daftar reservasi aktif;
+
+if (Reservasi ditemukan?) then (tidak)
+  :Throw ReservationNotFoundException;
+  :Tampilkan pesan error;
+  stop
+else (ya)
+endif
+
+if (Tipe reservasi?) then (FlightReservation)
+  :Kembalikan kursi ke availableSeats;
+else (HotelReservation)
+  :Kembalikan kamar ke availableRooms;
+endif
+
+:Hapus reservasi dari daftar aktif;
+:Tampilkan "Reservasi berhasil dibatalkan";
+
+stop
+@enduml
